@@ -4,6 +4,12 @@ import Dashboard from "./Dashboard";
 
 import TrackAnalysis from "./TrackAnalysis";
 
+import PlaylistOptimizer from "./PlaylistOptimizer";
+
+import Analytics from "./Analytics";
+
+import ArtistTools from "./ArtistTools";
+
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
@@ -11,6 +17,12 @@ const PAGES = {
     Dashboard: Dashboard,
     
     TrackAnalysis: TrackAnalysis,
+    
+    PlaylistOptimizer: PlaylistOptimizer,
+    
+    Analytics: Analytics,
+    
+    ArtistTools: ArtistTools,
     
 }
 
@@ -42,6 +54,12 @@ function PagesContent() {
                 <Route path="/Dashboard" element={<Dashboard />} />
                 
                 <Route path="/TrackAnalysis" element={<TrackAnalysis />} />
+                
+                <Route path="/PlaylistOptimizer" element={<PlaylistOptimizer />} />
+                
+                <Route path="/Analytics" element={<Analytics />} />
+                
+                <Route path="/ArtistTools" element={<ArtistTools />} />
                 
             </Routes>
         </Layout>
