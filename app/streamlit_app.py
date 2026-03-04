@@ -38,12 +38,15 @@ with tab2:
     csv_path = "data/dataset.csv"
     if os.path.exists(csv_path):
         df = pd.read_csv(csv_path)
+        # Convert columns to proper types to avoid Arrow serialization issues
+        df = df.astype({"skip_flag": "int64"})
         idx = st.slider("Row index", 0, len(df)-1, 0)
         row = df.iloc[idx]
-        st.write(row[["track_id","user_id","genre","tempo","danceability","energy","valence","popularity","release_year","skip_flag"]])
+        display_cols = ["track_id","user_id","genre","tempo","danceability","energy","valence","popularity","release_year","skip_flag"]
+        st.dataframe(row[display_cols].to_frame().T)
         if st.button("Predict from spectrogram"):
             payload = {
-                "spectrogram_path": row["spectrogram_path"],
+                "spectrogram_path": str(row["spectrogram_path"]),
                 "metadata": {
                     "tempo": float(row["tempo"]), "danceability": float(row["danceability"]),
                     "energy": float(row["energy"]), "valence": float(row["valence"]),
@@ -54,7 +57,7 @@ with tab2:
             try:
                 resp = requests.post(f"{backend_url}/predict", json=payload, timeout=60)
                 prob = resp.json()["skip_probability"]
-                st.success(f"Predicted skip probability: **{prob:.3f}** (label={row['skip_flag']})")
+                st.success(f"Predicted skip probability: **{prob:.3f}** (label={int(row['skip_flag'])})")
                 st.progress(min(max(prob, 0.0), 1.0))
             except Exception as e:
                 st.error(f"Error calling backend: {e}")

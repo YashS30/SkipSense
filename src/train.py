@@ -1,4 +1,4 @@
-import argparse, os, numpy as np, pandas as pd, joblib
+import argparse, os, numpy as np, pandas as pd, joblib, json
 NUMERIC_COLS = ["tempo", "danceability", "energy", "valence", "popularity", "release_year"]
 CAT_COLS = ["genre"]
 

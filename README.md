@@ -21,3 +21,38 @@ This repo includes:
 ```bash
 python -m venv .venv && source .venv/bin/activate  # (Windows: .venv\Scripts\activate)
 pip install -r requirements.txt
+
+
+# SkipSense — Start-to-Finish Run Guide (copy/paste)
+
+> Run everything from the **project root** folder (the one containing `src/`, `app/`, `data/`).
+
+---
+
+## 0) Go to the project root
+
+```bash
+cd "/Users/yashs/Documents/Move Over/GitHub/SkipSense"
+
+source .venv/bin/activate
+
+python3 -m pip install --upgrade pip
+pip install numpy pandas tqdm librosa scikit-learn torch torchaudio streamlit fastapi uvicorn
+
+python3 -c "import numpy, pandas, tqdm, librosa; print('deps ok')"
+
+python3 data/simulate_dataset.py --n_tracks 500 --n_users 100 --out_csv data/dataset.csv
+
+ls -la data/dataset.csv
+python3 -m src.audio.preprocess --csv data/dataset.csv --out_dir data/spectrograms
+ls -la data/spectrograms | head
+python3 src/train.py --csv data/dataset.csv --epochs 10 --batch_size 32 --out_dir models
+ls -la models
+uvicorn src.serve.api:app --reload --port 8000
+
+##  in different terminal:
+
+cd "/Users/yashs/Documents/Move Over/GitHub/SkipSense"
+source .venv/bin/activate
+
+streamlit run app/app.py    
